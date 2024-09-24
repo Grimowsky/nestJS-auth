@@ -1,0 +1,14 @@
+UserService:
+-registering user + bcrypt for user password
+-method for comparing UserPassword and UserEmail
+
+AuthService:
+-login (with jwt creation and sending back)
+ login = compare username & password with UserSerivce method
+
+
+-refresh token flow (later)
+
+AuthGuard
+-check if token is valid
+
