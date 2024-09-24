@@ -11,8 +11,17 @@ export class UserController {
   async registerUser(@Body() user: CreateUserDto) {
     await this.userService.registerUser(user);
   }
-  @Get('/:email')
-  async getUserByEmail(@Param('email') email: string) {
-    return await this.userService.findUser({ email: email });
+  @Get('/')
+  async users() {
+    return this.userService.users();
+  }
+  @Get('/:id')
+  async getUserById(@Param('id') id: string) {
+    return this.userService.findUser({ id: id });
+  }
+  //some sort of response mapper might be needed
+  @Get('/profile/:id')
+  async getUserProfile(@Param('id') id: string) {
+    return this.userService.profile({ id: id });
   }
 }
