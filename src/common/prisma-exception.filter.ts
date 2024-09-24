@@ -21,10 +21,15 @@ export class PrismaKnownClientExceptions implements ExceptionFilter {
     let httpStatus: HttpStatus | number = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: string = 'UNKNOWN_PRISMA_ERR';
 
+    console.log('@@@ PRISMA EXCEPTION @@@', exception);
+
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       const code = exception?.code;
       switch (code) {
-        //record to udpate not found code
+        case 'P2002':
+          httpStatus = 400;
+          message = 'Violation of unique constraints';
+          break;
         case 'P2025':
           httpStatus = 404;
           message = 'Resource to update not found';
