@@ -2,10 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   private async comparePassword(
     loginPassword: string,
@@ -31,7 +35,12 @@ export class AuthService {
     }
 
     if (await this.comparePassword(loginDetails.password, user.password)) {
-      return { jwt: 'jwtToken' };
+      return {
+        access_token: await this.jwtService.signAsync({
+          id: user.id,
+          username: user.username,
+        }),
+      };
     }
   }
 }
