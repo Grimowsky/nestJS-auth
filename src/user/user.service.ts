@@ -45,8 +45,6 @@ export class UserService {
       },
     });
 
-    console.log('@@@', user);
-
     return user;
   }
 }
