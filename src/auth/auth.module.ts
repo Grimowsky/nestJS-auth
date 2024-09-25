@@ -5,6 +5,7 @@ import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import * as process from 'node:process';
+import { JwtAuthService } from '../jwt/jwt-auth.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import * as process from 'node:process';
     }),
   ],
   controllers: [AuthController],
-  providers: [PrismaService, UserService, AuthService],
+  providers: [PrismaService, UserService, AuthService, JwtAuthService],
 })
 export class AuthModule {}
