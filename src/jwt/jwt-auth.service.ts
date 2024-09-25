@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService as nestJwt } from '@nestjs/jwt';
+import { JwtService as nestJwt, JwtSignOptions } from '@nestjs/jwt';
 import { Request } from 'express';
-import process from 'node:process';
 import { CreateTokenDto } from './dto/create-token.dto';
 
 @Injectable()
@@ -15,17 +14,19 @@ export class JwtAuthService {
   decode(token: string): { id: string } {
     return this.jwt.decode(token);
   }
-  async generateToken(userDetails: CreateTokenDto) {
-    return await this.jwt.signAsync({
-      id: userDetails.id,
-      username: userDetails.username,
-    });
+  async generateToken(userDetails: CreateTokenDto, options: JwtSignOptions) {
+    return await this.jwt.signAsync(
+      {
+        id: userDetails.id,
+        username: userDetails.username,
+      },
+      options,
+    );
   }
   async verify(token: string) {
+    console.log('@@@', token);
     try {
-      await this.jwt.verifyAsync(token, {
-        secret: process.env.JWT_SECRET,
-      });
+      await this.jwt.verifyAsync(token);
     } catch {
       throw new UnauthorizedException();
     }

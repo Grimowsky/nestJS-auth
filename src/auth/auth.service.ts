@@ -35,10 +35,17 @@ export class AuthService {
     }
 
     if (await this.comparePassword(loginDetails.password, user.password)) {
+      const userPayload = {
+        id: user.id,
+        username: user.username,
+      };
       return {
-        access_token: await this.jwtService.generateToken({
-          id: user.id,
-          username: user.username,
+        //it should be moved to env file, this expiresIn options
+        access_token: await this.jwtService.generateToken(userPayload, {
+          expiresIn: '30m',
+        }),
+        refresh_token: await this.jwtService.generateToken(userPayload, {
+          expiresIn: '1h',
         }),
       };
     }
